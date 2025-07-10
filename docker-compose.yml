@@ -1,0 +1,17 @@
+version: '3'
+services:
+  api_laravel:
+      container_name: API_LARAVEL
+      build:
+        context: laravel
+        dockerfile: Dockerfile
+      ports:
+        - 8888:8888
+      volumes:
+        - ./laravel:/laravel
+      command: php -S 0.0.0.0:8888 public/index.php
+      networks:
+        - rede
+networks:
+  rede:
+    driver: bridge
