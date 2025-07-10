@@ -9,7 +9,7 @@ services:
         - 8888:8888
       volumes:
         - ./laravel:/laravel
-      command: php -S 0.0.0.0:8888 public/index.php
+      command: composer run startup
       networks:
         - rede
 networks:
