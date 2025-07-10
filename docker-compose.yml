@@ -10,8 +10,24 @@ services:
       volumes:
         - ./laravel:/laravel
       command: composer run startup
+      depends_on:
+        - banco
       networks:
         - rede
+  banco:
+    image: mysql:5.7
+    container_name: banco
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: app
+      MYSQL_USER: app
+      MYSQL_PASSWORD: app
+    ports:
+      - 3306:3306
+    networks:
+      - rede
+    volumes:
+      - ./db:/var/lib/mysql   
 networks:
   rede:
     driver: bridge
