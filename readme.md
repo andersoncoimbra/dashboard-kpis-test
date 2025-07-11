@@ -123,7 +123,7 @@ Após isso:
 
 ## 📹 Vídeo Demonstração
 
-> 🔗 Link (adicionar aqui quando disponível)
+> 🔗 Link  [Video](https://drive.google.com/file/d/1YQ_CK9ix17ikRUSt2IliXVoW28xwhtDk/view?usp=sharing) 
 
 * Demonstração do login e autenticação
 * Visualização dos KPIs com atualização dinâmica
