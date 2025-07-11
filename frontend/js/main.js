@@ -6,6 +6,9 @@ function atualizarKPIs() {
     $.ajax({
         url: 'http://localhost:8888/api/kpis',
         method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
         success: function (data) {        
     $('#kpi-cards .col-lg-3.col-6').not('#kpi-modelo').remove();
     const kpiModelo = $('#kpi-modelo');
@@ -36,10 +39,47 @@ function atualizarKPIs() {
         }
     });
 }
+function carregarUsuario() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        window.location.href = 'login.html'; 
+    }
+    $.ajax({
+        url: 'http://localhost:8888/api/user',
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + token
+        },
+        success: function (data) {            
+            $('#user-name').text(data.name);
+
+        },
+        error: function (error) {
+            console.error('Erro ao buscar os dados do usuário:', error);
+        }
+    });
+}
+
+function logout() {
+    localStorage.removeItem('token');
+    window.location.href = 'login.html'; 
+}
+$(document).on('click', '[data-lte-toggle="logout"]', function (e) {
+    console.log('Logout clicked');
+    e.preventDefault();
+    logout();
+});
 
 $(document).ready(function () {
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+        window.location.href = 'login.html'; 
+    }
+    carregarUsuario();
     atualizarKPIs();
     setInterval(atualizarKPIs, 30000);
+
 });
       
     

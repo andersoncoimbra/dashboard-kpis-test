@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3/dist/css/adminlte.min.css">
+</head>
+<body class="hold-transition login-page">
+
+<div class="login-box">
+  <div class="card card-outline card-primary">
+    <div class="card-header text-center">
+      <b>Login</b>
+    </div>
+    <div class="card-body">
+      <form id="login-form">
+        <div class="input-group mb-3">
+          <input type="email" class="form-control" placeholder="Email" name="email" required>
+        </div>
+        <div class="input-group mb-3">
+          <input type="password" class="form-control" placeholder="Senha" name="password" required>
+        </div>
+        <div class="row">
+          <div class="col-8"></div>
+          <div class="col-4">
+            <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+          </div>
+        </div>
+      </form>
+      <p id="error-msg" class="text-danger mt-2"></p>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', async function () {
+    const token = localStorage.getItem('token');
+    if (token) {
+        try {
+            const res = await fetch('http://localhost:8888/api/user', {
+                method: 'GET',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (res.ok) {
+                const user = await res.json();
+                window.location.href = '/';
+                return;
+            }
+        } catch (e) {
+            // Ignora erros de rede
+        }
+    }
+    // Preenche campos para teste
+    const email = "test@example.com";
+    const password = "password";
+    if (email && password) {
+        document.querySelector('input[name="email"]').value = email;
+        document.querySelector('input[name="password"]').value = password;
+    }
+});
+
+
+  document.getElementById('login-form').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const data = {
+      email: form.email.value,
+      password: form.password.value
+    };
+
+    const res = await fetch('http://localhost:8888/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    if (res.ok) {
+      const json = await res.json();
+      localStorage.setItem('token', json.token);
+      window.location.href = 'index.html'; 
+    } else {
+      const err = await res.json();
+      document.getElementById('error-msg').textContent = err.message || 'Erro ao logar';
+    }
+  });
+</script>
+
+</body>
+</html>
